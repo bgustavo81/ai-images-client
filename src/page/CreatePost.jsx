@@ -39,7 +39,7 @@ const CreatePost = () => {
         });
 
         const data = await response.json();
-        setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}` });
+        setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}`, b64_json: data.b64_json });
       } catch (err) {
         alert(err);
       } finally {
@@ -56,17 +56,54 @@ const CreatePost = () => {
     if (form.prompt && form.photo) {
       setLoading(true);
       try {
-        const response = await fetch('https://ai-images-6a6s.onrender.com/api/v1/post', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ ...form }),
-        });
+        let image;
+        let b64_json = form.photo;
 
-        await response.json();
+        console.log(image);
 
-        // alert('Success');
+        if (form.photo) {
+          await fetch ('https://ai-images-6a6s.onrender.com/api/v1/post/image', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          })
+          .then((response) => response.json())
+          .then( async (uploadConfig) => {
+            const url = uploadConfig.url;
+            const key = uploadConfig.key;
+
+            image = await fetch(b64_json)
+            .then( async res => {
+              let photo = await res.blob();
+              photo.name = key;
+              photo.lastModifiedDate = new Date().getTime();
+              console.log(photo);
+              return photo;
+            });
+
+            await fetch (uploadConfig.url, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'image/jpeg'
+              },
+              body: image,
+              mode: "cors" 
+            });
+
+            form.photo = key;
+
+            const response = await fetch('https://ai-images-6a6s.onrender.com/api/v1/post', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ ...form })
+            });
+            await response.json();
+          });
+        }
+        alert('Success');
         navigate('/');
       } catch (err) {
         alert(err);
