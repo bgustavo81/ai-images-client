@@ -1,6 +1,6 @@
 # ai-images-client
 
-![This is an image](https://my-foto-bucket-123.s3.us-east-2.amazonaws.com/github/ai-image-generator-app-diagram.png)
+![This is an image](https://my-foto-bucket-123.s3.us-east-2.amazonaws.com/github/ai-image-generator-diagram.png)
 
 ## Technologies used on the application:
 ### Front-End:
