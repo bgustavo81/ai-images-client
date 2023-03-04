@@ -16,7 +16,6 @@
 ### AI Image Generator - Powered by OpenAI's DALL-E API
 * Generate an image using OpenAI's DALL-E API.
 * Post the image to a community collage.
-* Please review the Client Repository for architecture and techical details.
 
 ### View active session at https://venerable-horse-ef9942.netlify.app/
 
